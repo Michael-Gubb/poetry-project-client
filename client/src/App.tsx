@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Poem from "./components/Poem";
 import "./App.css";
 
 function App() {
@@ -33,19 +34,9 @@ function App() {
     <>
       <h1>Poem page</h1>
       <div className="card"></div>
-      {poems.map((poem) => {
-        return (
-          <div key={poem.poemId}>
-            <p>
-              ----------------<br></br>
-            </p>
-            <p>{poem.poemText}</p>
-            <p>
-              ---------------<br></br>
-            </p>
-          </div>
-        );
-      })}
+      {poems.map((poem) => (
+        <Poem poem={poem} />
+      ))}
     </>
   );
 }
