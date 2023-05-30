@@ -2,7 +2,16 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [poems, setPoems] = useState([{ poemText: "placeholder", poemId: 5 }]);
+  const [poems, setPoems] = useState<Poem[]>([
+    {
+      poemText: "placeholder",
+      poemId: "5",
+      poemTopics: ["Dog", "Cat", "Fish"],
+      poemDate: "",
+      poemGenre: "",
+      poemImg: "",
+    },
+  ]);
 
   async function fetchPoems() {
     const response = await fetch("http://localhost:3333/poems");
