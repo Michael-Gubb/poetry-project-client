@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Poem from "./components/Poem";
 import "./App.css";
 
 function App() {
@@ -12,36 +13,31 @@ function App() {
       poemImg: "",
     },
   ]);
-
-  async function fetchPoems() {
-    const response = await fetch(
-      "https://wonderful-poems.up.railway.app/api/poems"
-    );
-    const data = await response.json();
-    console.log(data);
-
-    setPoems(data.poems);
-  }
+  useEffect(() => {
+    const poemController = new AbortController();
+    const poemSignal = poemController.signal;
+    async function fetchPoems(signal: AbortSignal) {
+      const response = await fetch(
+        "https://wonderful-poems.up.railway.app/api/poems",
+        { signal }
+      );
+      const data = await response.json();
+      setPoems(data.poems);
+    }
+    fetchPoems(poemSignal);
+    return () => {
+      poemController.abort();
+    };
+  }, []);
 
   return (
     <>
       <h1>Poem page</h1>
-      <div className="card">
-        <button onClick={fetchPoems}>my button</button>
-      </div>
-      {poems.map((poem) => {
-        return (
-          <div key={poem.poemId}>
-            <p>
-              ----------------<br></br>
-            </p>
-            <p>{poem.poemText}</p>
-            <p>
-              ---------------<br></br>
-            </p>
-          </div>
-        );
-      })}
+      <ul>
+        {poems.map((poem) => (
+          <Poem key={poem.poemId} poem={poem} />
+        ))}
+      </ul>
     </>
   );
 }
