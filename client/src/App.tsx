@@ -14,7 +14,9 @@ function App() {
   ]);
 
   async function fetchPoems() {
-    const response = await fetch("http://localhost:3333/poems");
+    const response = await fetch(
+      "https://wonderful-poems.up.railway.app/api/poems"
+    );
     const data = await response.json();
     console.log(data);
 
