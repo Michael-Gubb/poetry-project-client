@@ -33,10 +33,11 @@ function App() {
   return (
     <>
       <h1>Poem page</h1>
-      <div className="card"></div>
-      {poems.map((poem) => (
-        <Poem poem={poem} />
-      ))}
+      <ul>
+        {poems.map((poem) => (
+          <Poem key={poem.poemId} poem={poem} />
+        ))}
+      </ul>
     </>
   );
 }

@@ -1,13 +1,18 @@
 export default function Poem({ poem: poem }: { poem: Poem }) {
   return (
-    <div key={poem.poemId}>
+    <li key={poem.poemId}>
       <p>
-        ----------------<br></br>
+        ----------------
+        <br />
       </p>
-      <p>{poem.poemText}</p>
+      <h2>{`${poem.poemGenre} for ${poem.poemTopics[0]},${poem.poemTopics[1]} and ${poem.poemTopics[2]}`}</h2>
+      {poem.poemText.split("\n").map((part) => {
+        return <p>{part}</p>;
+      })}
       <p>
-        ---------------<br></br>
+        ---------------
+        <br />
       </p>
-    </div>
+    </li>
   );
 }
