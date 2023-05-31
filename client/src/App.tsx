@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Poem from "./components/Poem";
 import "./App.css";
 
+const serverURL: string = import.meta.env.VITE_SERVER_URL;
+
 function App() {
   const [poems, setPoems] = useState<Poem[]>([
     {
@@ -13,22 +15,29 @@ function App() {
       poemImg: "",
     },
   ]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const poemController = new AbortController();
     const poemSignal = poemController.signal;
     async function fetchPoems(signal: AbortSignal) {
-      const response = await fetch(
-        "https://wonderful-poems.up.railway.app/api/poems",
-        { signal }
-      );
+      const response = await fetch(serverURL, { signal });
       const data = await response.json();
       setPoems(data.poems);
+      setIsLoading(false);
     }
     fetchPoems(poemSignal);
     return () => {
       poemController.abort();
     };
   }, []);
+  if (isLoading) {
+    return (
+      <>
+        <h1>Poem page</h1>
+        <p>Loading...</p>
+      </>
+    );
+  }
 
   return (
     <>
