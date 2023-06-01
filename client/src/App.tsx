@@ -1,10 +1,11 @@
 import Poems from "./components/Poems";
+import Title from "./components/Title";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <h1 id={"title"}>Poem page</h1>
+      <Title />
       <Poems />
     </>
   );
