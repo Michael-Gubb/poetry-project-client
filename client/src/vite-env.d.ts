@@ -6,7 +6,7 @@
 type Poem = {
   /** UUID */
   poemId: string;
-  /** Includes /n */
+  /** Includes \n */
   poemText: string;
   /** Length 3 array */
   poemTopics: string[];
