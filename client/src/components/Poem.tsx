@@ -1,6 +1,7 @@
 import "./Poem.css";
 import { generatePoemTitle } from "../utils/poemUtils";
 
+/** Renders individual poem*/
 export default function Poem({ poem: poem }: { poem: Poem }) {
   return (
     <li key={poem.poemId} id={poem.poemId}>

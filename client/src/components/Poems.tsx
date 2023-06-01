@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { generatePoemTitle } from "../utils/poemUtils";
 import Poem from "./Poem";
+import "./Poems.css";
 
 const envServerURL: string | undefined = import.meta.env.VITE_SERVER_URL;
 const serverURL = envServerURL ? envServerURL : "http://localhost:3333";
 const poemsPath = `/api/poems`;
-
+/**
+ * Fetches data from server and displays index of poem titles with links and poem content
+ */
 export default function Poems() {
   const [poems, setPoems] = useState<Poem[]>([
     {
@@ -32,12 +35,9 @@ export default function Poems() {
       poemController.abort();
     };
   }, []);
+
   if (isLoading) {
-    return (
-      <>
-        <p>Loading...</p>
-      </>
-    );
+    return <Loading />;
   }
 
   return (
@@ -52,16 +52,25 @@ export default function Poems() {
   );
 }
 
+/** Creates list of poem titles with links to poems */
 function PoemsTitles({ poems }: { poems: Poem[] }) {
   return (
-    <>
+    <ul>
       {poems.map((poem) => {
         return (
-          <a href={"#" + poem.poemId} key={"linkto" + poem.poemId}>
-            {generatePoemTitle(poem) + "     "}
-          </a>
+          <li key={"linkto" + poem.poemId}>
+            <a href={"#" + poem.poemId}>{generatePoemTitle(poem) + "     "}</a>
+          </li>
         );
       })}
+    </ul>
+  );
+}
+
+function Loading() {
+  return (
+    <>
+      <p>Loading...</p>
     </>
   );
 }
