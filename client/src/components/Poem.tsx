@@ -10,10 +10,11 @@ export default function Poem({ poem: poem }: { poem: Poem }) {
         <br />
       </p>
       <h2>{generatePoemTitle(poem)}</h2>
+      <p>Created at {poem.poemDate}</p>
       <p className={"poemText"}>{poem.poemText}</p>
       <a href={"#title"}>Top of page</a>
       <p>
-        ---------------
+        -----------------
         <br />
       </p>
     </li>

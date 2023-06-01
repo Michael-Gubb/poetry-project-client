@@ -40,6 +40,10 @@ export default function Poems() {
     return <Loading />;
   }
 
+  return <PoemsList poems={poems} />;
+}
+
+function PoemsList({ poems }: { poems: Poem[] }) {
   return (
     <>
       <PoemsTitles poems={poems} />
@@ -54,19 +58,37 @@ export default function Poems() {
 
 /** Creates list of poem titles with links to poems */
 function PoemsTitles({ poems }: { poems: Poem[] }) {
+  const [closed, setClosed] = useState(true);
+  function handleClick() {
+    setClosed((v) => {
+      return !v;
+    });
+  }
   return (
-    <ul>
-      {poems.map((poem) => {
-        return (
-          <li key={"linkto" + poem.poemId}>
-            <a href={"#" + poem.poemId}>{generatePoemTitle(poem) + "     "}</a>
-          </li>
-        );
-      })}
-    </ul>
+    <div>
+      <button onClick={handleClick}>
+        {closed ? "Show Poems index" : "Hide Poems index"}
+      </button>
+      {closed ? (
+        <></>
+      ) : (
+        <ul>
+          {poems.map((poem) => {
+            return (
+              <li key={"linkto" + poem.poemId}>
+                <a href={"#" + poem.poemId}>
+                  {generatePoemTitle(poem) + "     "}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
   );
 }
 
+/** Generic loading component */
 function Loading() {
   return (
     <>
