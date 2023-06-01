@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { generatePoemTitle } from "../utils/poemUtils";
 import Poem from "./Poem";
 
 const envServerURL: string | undefined = import.meta.env.VITE_SERVER_URL;
@@ -41,11 +42,26 @@ export default function Poems() {
 
   return (
     <>
+      <PoemsTitles poems={poems} />
       <ul>
         {poems.map((poem) => (
           <Poem key={poem.poemId} poem={poem} />
         ))}
       </ul>
+    </>
+  );
+}
+
+function PoemsTitles({ poems }: { poems: Poem[] }) {
+  return (
+    <>
+      {poems.map((poem) => {
+        return (
+          <a href={"#" + poem.poemId} key={"linkto" + poem.poemId}>
+            {generatePoemTitle(poem) + "     "}
+          </a>
+        );
+      })}
     </>
   );
 }

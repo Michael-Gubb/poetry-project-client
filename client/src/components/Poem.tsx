@@ -1,4 +1,5 @@
 import "./Poem.css";
+import { generatePoemTitle } from "../utils/poemUtils";
 
 export default function Poem({ poem: poem }: { poem: Poem }) {
   return (
@@ -9,14 +10,11 @@ export default function Poem({ poem: poem }: { poem: Poem }) {
       </p>
       <h2>{generatePoemTitle(poem)}</h2>
       <p className={"poemText"}>{poem.poemText}</p>
+      <a href={"#title"}>Top of page</a>
       <p>
         ---------------
         <br />
       </p>
     </li>
   );
-}
-
-function generatePoemTitle(poem: Poem) {
-  return `${poem.poemGenre} for ${poem.poemTopics[0]}, ${poem.poemTopics[1]} and ${poem.poemTopics[2]}`;
 }
