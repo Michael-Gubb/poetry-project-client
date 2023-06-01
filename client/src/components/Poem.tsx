@@ -1,3 +1,5 @@
+import "./Poem.css";
+
 export default function Poem({ poem: poem }: { poem: Poem }) {
   return (
     <li key={poem.poemId} id={poem.poemId}>
@@ -5,14 +7,16 @@ export default function Poem({ poem: poem }: { poem: Poem }) {
         ----------------
         <br />
       </p>
-      <h2>{`${poem.poemGenre} for ${poem.poemTopics[0]},${poem.poemTopics[1]} and ${poem.poemTopics[2]}`}</h2>
-      {poem.poemText.split("\n").map((part) => {
-        return <p>{part}</p>;
-      })}
+      <h2>{generatePoemTitle(poem)}</h2>
+      <p className={"poemText"}>{poem.poemText}</p>
       <p>
         ---------------
         <br />
       </p>
     </li>
   );
+}
+
+function generatePoemTitle(poem: Poem) {
+  return `${poem.poemGenre} for ${poem.poemTopics[0]}, ${poem.poemTopics[1]} and ${poem.poemTopics[2]}`;
 }
