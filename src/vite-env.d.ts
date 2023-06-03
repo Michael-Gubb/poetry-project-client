@@ -18,6 +18,8 @@ type Poem = {
   poemDate: string;
 };
 
+type GetPoems = { poems: Poem[] };
+
 type GenresToRemove = {
   [index: string]: boolean;
 };
