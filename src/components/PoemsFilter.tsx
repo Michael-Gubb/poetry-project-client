@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./PoemsFilter.css";
 
 /** Controls filtering of poems by genre and topic */
 export default function PoemsFilter({
@@ -22,13 +23,12 @@ export default function PoemsFilter({
       return !v;
     });
   }
-  const cssDisplay = closed ? { display: "none" } : {};
   return (
     <div>
       <button onClick={handleShow}>
         {closed ? "Show Poems filters" : "Hide Poems filters"}
       </button>
-      <div style={cssDisplay}>
+      <div className={closed ? "hidden" : ""}>
         <GenreFilter
           poemGenres={poemGenres}
           hiddenGenres={hiddenGenres}
@@ -59,13 +59,12 @@ function GenreFilter({
       return !v;
     });
   }
-  const cssDisplay = closed ? { display: "none" } : {};
   return (
     <div>
       <button onClick={handleShow}>
         {closed ? "Show Genre filter" : "Hide Genre filter"}
       </button>
-      <div style={cssDisplay}>
+      <div className={closed ? "hidden" : ""}>
         <h2>Genre filter</h2>
         <form>
           {poemGenres.map((genre) => (
@@ -98,7 +97,7 @@ function GenreFilterInput({
     setHiddenGenres(newGenres);
   };
   return (
-    <>
+    <div>
       <label htmlFor={genre}>{genre}</label>
       <input
         id={genre}
@@ -106,7 +105,7 @@ function GenreFilterInput({
         checked={displayValue}
         onChange={handleChange}
       ></input>
-    </>
+    </div>
   );
 }
 
@@ -126,13 +125,12 @@ function TopicsFilter({
       return !v;
     });
   }
-  const cssDisplay = closed ? { display: "none" } : {};
   return (
     <div>
       <button onClick={handleShow}>
         {closed ? "Show Topics filter" : "Hide Topics filter"}
       </button>
-      <div style={cssDisplay}>
+      <div className={closed ? "hidden" : ""}>
         <h2>Topic filter</h2>
         <form>
           {poemTopics.map((topic) => (
@@ -165,7 +163,7 @@ function TopicFilterInput({
     setHiddenTopics(newTopics);
   };
   return (
-    <>
+    <div>
       <label htmlFor={topic}>{topic}</label>
       <input
         id={topic}
@@ -173,6 +171,6 @@ function TopicFilterInput({
         checked={displayValue}
         onChange={handleChange}
       ></input>
-    </>
+    </div>
   );
 }

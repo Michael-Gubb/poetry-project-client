@@ -98,13 +98,12 @@ function PoemsTitles({
       return !v;
     });
   }
-  const cssDisplay = closed ? { display: "none" } : {};
   return (
     <div>
       <button onClick={handleShow}>
         {closed ? "Show Poems index" : "Hide Poems index"}
       </button>
-      <ul style={cssDisplay}>
+      <ul className={closed ? "hidden" : ""}>
         {poems.map((poem) => {
           return (
             <li
