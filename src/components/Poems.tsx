@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { generatePoemTitle } from "../utils/poemUtils";
 import Poem from "./Poem";
+import PoemsFilter from "./PoemsFilter";
+import { allPoemGenres, allPoemTopics } from "../utils/poemUtils";
+import {
+  filterPoemByGenreGenerator,
+  filterPoemByTopicGenerator,
+} from "../utils/poemUtils";
 import "./Poems.css";
 
 const envServerURL: string | undefined = import.meta.env.VITE_SERVER_URL;
@@ -35,7 +41,6 @@ export default function Poems() {
       poemController.abort();
     };
   }, []);
-
   if (isLoading) {
     return <Loading />;
   }
@@ -44,12 +49,33 @@ export default function Poems() {
 }
 
 function PoemsList({ poems }: { poems: Poem[] }) {
+  const [hiddenGenres, setHiddenGenres] = useState<GenresToRemove>({});
+  const [hiddenTopics, setHiddenTopics] = useState<TopicsToRemove>({});
   return (
     <>
-      <PoemsTitles poems={poems} />
+      <PoemsFilter
+        poemGenres={allPoemGenres}
+        hiddenGenres={hiddenGenres}
+        setHiddenGenres={setHiddenGenres}
+        poemTopics={allPoemTopics}
+        hiddenTopics={hiddenTopics}
+        setHiddenTopics={setHiddenTopics}
+      />
+      <PoemsTitles
+        poems={poems}
+        hiddenGenres={hiddenGenres}
+        hiddenTopics={hiddenTopics}
+      />
       <ul>
         {poems.map((poem) => (
-          <Poem key={poem.poemId} poem={poem} />
+          <Poem
+            key={poem.poemId}
+            poem={poem}
+            display={
+              filterPoemByGenreGenerator(hiddenGenres)(poem) &&
+              filterPoemByTopicGenerator(hiddenTopics)(poem)
+            }
+          />
         ))}
       </ul>
     </>
@@ -57,33 +83,46 @@ function PoemsList({ poems }: { poems: Poem[] }) {
 }
 
 /** Creates list of poem titles with links to poems */
-function PoemsTitles({ poems }: { poems: Poem[] }) {
+function PoemsTitles({
+  poems,
+  hiddenGenres,
+  hiddenTopics,
+}: {
+  poems: Poem[];
+  hiddenGenres: GenresToRemove;
+  hiddenTopics: TopicsToRemove;
+}) {
   const [closed, setClosed] = useState(true);
-  function handleClick() {
+  function handleShow() {
     setClosed((v) => {
       return !v;
     });
   }
+  const cssDisplay = closed ? { display: "none" } : {};
   return (
     <div>
-      <button onClick={handleClick}>
+      <button onClick={handleShow}>
         {closed ? "Show Poems index" : "Hide Poems index"}
       </button>
-      {closed ? (
-        <></>
-      ) : (
-        <ul>
-          {poems.map((poem) => {
-            return (
-              <li key={"linkto" + poem.poemId}>
-                <a href={"#" + poem.poemId}>
-                  {generatePoemTitle(poem) + "     "}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <ul style={cssDisplay}>
+        {poems.map((poem) => {
+          return (
+            <li
+              key={"linkto" + poem.poemId}
+              style={
+                filterPoemByGenreGenerator(hiddenGenres)(poem) &&
+                filterPoemByTopicGenerator(hiddenTopics)(poem)
+                  ? { display: "list-item" }
+                  : { display: "none" }
+              }
+            >
+              <a href={"#" + poem.poemId}>
+                {generatePoemTitle(poem) + "     "}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

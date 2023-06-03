@@ -17,3 +17,10 @@ type Poem = {
   //** Date created (Auckland TZ). As string as dates are annoying */
   poemDate: string;
 };
+
+type GenresToRemove = {
+  [index: string]: boolean;
+};
+type TopicsToRemove = {
+  [index: string]: boolean;
+};
