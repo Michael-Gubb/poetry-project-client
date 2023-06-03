@@ -3,10 +3,6 @@ export function generatePoemTitle(poem: Poem) {
   return `${poem.poemGenre} for ${poem.poemTopics[0]}, ${poem.poemTopics[1]} and ${poem.poemTopics[2]}`;
 }
 
-type GenresToRemove = {
-  [index: string]: boolean;
-};
-
 /** Generates a function to filter poems by genre*/
 export function filterPoemByGenreGenerator(genresToRemove: GenresToRemove) {
   const genresSet = new Set();
