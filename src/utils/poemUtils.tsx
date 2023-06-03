@@ -23,7 +23,7 @@ export function filterPoemByGenreGenerator(genresToRemove: GenresToRemove) {
 type TopicsToRemove = {
   [index: string]: boolean;
 };
-/** Generates a function to filter poems by topic*/
+/** Generates a function to filter poems by topic, single filtered topic returns false*/
 export function filterPoemByTopicGenerator(topicsToRemove: TopicsToRemove) {
   const topicsSet = new Set();
   for (const topic in topicsToRemove) {
@@ -39,6 +39,29 @@ export function filterPoemByTopicGenerator(topicsToRemove: TopicsToRemove) {
     {
       return true;
     }
+  }
+  return showPoemByTopic;
+}
+
+/** Generates a function to filter poems by topic, all topics be included to return false*/
+export function filterPoemByTopicGenerouslyGenerator(
+  topicsToRemove: TopicsToRemove
+) {
+  const topicsToMatch = 3;
+  const topicsSet = new Set();
+  for (const topic in topicsToRemove) {
+    if (topicsToRemove[topic]) topicsSet.add(topic);
+  }
+  /** Display a poem based on its topic */
+  function showPoemByTopic(poem: Poem) {
+    let topics = 0;
+    for (const topic of poem.poemTopics) {
+      if (topicsSet.has(topic)) {
+        topics++;
+      }
+    }
+
+    return topics < topicsToMatch;
   }
   return showPoemByTopic;
 }

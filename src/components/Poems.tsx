@@ -6,6 +6,7 @@ import { allPoemGenres, allPoemTopics } from "../utils/poemUtils";
 import {
   filterPoemByGenreGenerator,
   filterPoemByTopicGenerator,
+  filterPoemByTopicGenerouslyGenerator,
 } from "../utils/poemUtils";
 import "./Poems.css";
 
@@ -51,6 +52,10 @@ export default function Poems() {
 function PoemsList({ poems }: { poems: Poem[] }) {
   const [hiddenGenres, setHiddenGenres] = useState<GenresToRemove>({});
   const [hiddenTopics, setHiddenTopics] = useState<TopicsToRemove>({});
+  const [displayGenerously, setDisplayGenerously] = useState(false);
+  const topicGenerator = displayGenerously
+    ? filterPoemByTopicGenerouslyGenerator
+    : filterPoemByTopicGenerator;
   return (
     <>
       <PoemsFilter
@@ -60,11 +65,14 @@ function PoemsList({ poems }: { poems: Poem[] }) {
         poemTopics={allPoemTopics}
         hiddenTopics={hiddenTopics}
         setHiddenTopics={setHiddenTopics}
+        displayGenerously={displayGenerously}
+        setDisplayGenerously={setDisplayGenerously}
       />
       <PoemsTitles
         poems={poems}
         hiddenGenres={hiddenGenres}
         hiddenTopics={hiddenTopics}
+        displayGenerously={displayGenerously}
       />
       <ul>
         {poems.map((poem) => (
@@ -73,7 +81,7 @@ function PoemsList({ poems }: { poems: Poem[] }) {
             poem={poem}
             display={
               filterPoemByGenreGenerator(hiddenGenres)(poem) &&
-              filterPoemByTopicGenerator(hiddenTopics)(poem)
+              topicGenerator(hiddenTopics)(poem)
             }
           />
         ))}
@@ -87,10 +95,12 @@ function PoemsTitles({
   poems,
   hiddenGenres,
   hiddenTopics,
+  displayGenerously,
 }: {
   poems: Poem[];
   hiddenGenres: GenresToRemove;
   hiddenTopics: TopicsToRemove;
+  displayGenerously: boolean;
 }) {
   const [closed, setClosed] = useState(true);
   function handleShow() {
@@ -98,6 +108,9 @@ function PoemsTitles({
       return !v;
     });
   }
+  const topicGenerator = displayGenerously
+    ? filterPoemByTopicGenerouslyGenerator
+    : filterPoemByTopicGenerator;
   return (
     <div>
       <button onClick={handleShow}>
@@ -110,7 +123,7 @@ function PoemsTitles({
               key={"linkto" + poem.poemId}
               style={
                 filterPoemByGenreGenerator(hiddenGenres)(poem) &&
-                filterPoemByTopicGenerator(hiddenTopics)(poem)
+                topicGenerator(hiddenTopics)(poem)
                   ? { display: "list-item" }
                   : { display: "none" }
               }
