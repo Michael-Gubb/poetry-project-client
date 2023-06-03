@@ -9,6 +9,8 @@ export default function PoemsFilter({
   setHiddenTopics,
   hiddenGenres,
   setHiddenGenres,
+  displayGenerously,
+  setDisplayGenerously,
 }: {
   poemGenres: string[];
   poemTopics: string[];
@@ -16,6 +18,8 @@ export default function PoemsFilter({
   setHiddenTopics: React.Dispatch<React.SetStateAction<TopicsToRemove>>;
   hiddenGenres: GenresToRemove;
   setHiddenGenres: React.Dispatch<React.SetStateAction<GenresToRemove>>;
+  displayGenerously: boolean;
+  setDisplayGenerously: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [closed, setClosed] = useState(true);
   function handleShow() {
@@ -38,6 +42,8 @@ export default function PoemsFilter({
           poemTopics={poemTopics}
           hiddenTopics={hiddenTopics}
           setHiddenTopics={setHiddenTopics}
+          displayGenerously={displayGenerously}
+          setDisplayGenerously={setDisplayGenerously}
         />
       </div>
     </div>
@@ -114,10 +120,14 @@ function TopicsFilter({
   poemTopics,
   hiddenTopics,
   setHiddenTopics,
+  displayGenerously,
+  setDisplayGenerously,
 }: {
   poemTopics: string[];
   hiddenTopics: TopicsToRemove;
   setHiddenTopics: React.Dispatch<React.SetStateAction<TopicsToRemove>>;
+  displayGenerously: boolean;
+  setDisplayGenerously: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [closed, setClosed] = useState(true);
   function handleShow() {
@@ -132,6 +142,9 @@ function TopicsFilter({
       </button>
       <div className={closed ? "hidden" : ""}>
         <h2>Topic filter</h2>
+        <button onClick={() => setDisplayGenerously((v) => !v)}>
+          {displayGenerously ? "At least one" : "All required"}{" "}
+        </button>
         <form>
           {poemTopics.map((topic) => (
             <TopicFilterInput
