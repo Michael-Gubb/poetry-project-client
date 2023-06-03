@@ -46,3 +46,56 @@ export function filterPoemByTopicGenerator(topicsToRemove: TopicsToRemove) {
   }
   return filterPoemByTopic;
 }
+
+/**
+ * List of poem topics to select 3 topics from (copied from server)
+ */
+export const allPoemTopics = [
+  "Dogs",
+  "Cats",
+  "Fish",
+  "Fruit",
+  "Balls",
+  "Bowls",
+  "Oranges",
+  "Hats",
+  "Shoes",
+  "Trees",
+  "Auckland",
+  "Wellington",
+  "Whangarei",
+  "Clouds",
+  "Rain",
+  "Sunshine",
+  "Lemurs",
+  "Capybaras",
+  "Spotted Sandpipers",
+  "Kiwi",
+  "Kea",
+  "Automobiles",
+  "Rats",
+  "Mice",
+  "Noodles",
+  "Horses",
+  "Chickens",
+  "Guinea Fowl",
+  "Ducks",
+  "Geese",
+  "New Zealand",
+  "Australia",
+  "Te Awamutu",
+  "Mount Cook",
+];
+
+/**
+ * List of poem genres
+ */
+export const allPoemGenres = [
+  "poem",
+  "eulogy",
+  "sonnet",
+  "haiku",
+  "limerick",
+  "ballad",
+  "elegy",
+];

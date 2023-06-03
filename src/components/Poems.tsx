@@ -1,6 +1,7 @@
-import { useState, useEffect, MouseEventHandler } from "react";
+import { useState, useEffect } from "react";
 import { generatePoemTitle } from "../utils/poemUtils";
 import Poem from "./Poem";
+import PoemsFilter from "./PoemsFilter";
 import "./Poems.css";
 
 const envServerURL: string | undefined = import.meta.env.VITE_SERVER_URL;
@@ -21,7 +22,6 @@ export default function Poems() {
     },
   ]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filterToPoems, setFilterToPoems] = useState(false);
   useEffect(() => {
     const poemController = new AbortController();
     const poemSignal = poemController.signal;
@@ -36,35 +36,17 @@ export default function Poems() {
       poemController.abort();
     };
   }, []);
-  function handleFilterPoems() {
-    setFilterToPoems((v) => !v);
-  }
-
   if (isLoading) {
     return <Loading />;
   }
 
-  return (
-    <PoemsList
-      poems={poems.filter(
-        (poem) => !filterToPoems || poem.poemGenre === "poem"
-      )}
-      handleFilterPoems={handleFilterPoems}
-    />
-  );
+  return <PoemsList poems={poems} />;
 }
 
-function PoemsList({
-  poems,
-  handleFilterPoems,
-}: {
-  poems: Poem[];
-  handleFilterPoems: MouseEventHandler;
-}) {
+function PoemsList({ poems }: { poems: Poem[] }) {
   return (
     <>
-      <button onClick={handleFilterPoems}>Filter to poems</button>
-
+      <PoemsFilter />
       <PoemsTitles poems={poems} />
       <ul>
         {poems.map((poem) => (
@@ -78,31 +60,28 @@ function PoemsList({
 /** Creates list of poem titles with links to poems */
 function PoemsTitles({ poems }: { poems: Poem[] }) {
   const [closed, setClosed] = useState(true);
-  function handleClick() {
+  function handleShow() {
     setClosed((v) => {
       return !v;
     });
   }
+  const cssDisplay = closed ? { display: "none" } : {};
   return (
     <div>
-      <button onClick={handleClick}>
+      <button onClick={handleShow}>
         {closed ? "Show Poems index" : "Hide Poems index"}
       </button>
-      {closed ? (
-        <></>
-      ) : (
-        <ul>
-          {poems.map((poem) => {
-            return (
-              <li key={"linkto" + poem.poemId}>
-                <a href={"#" + poem.poemId}>
-                  {generatePoemTitle(poem) + "     "}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <ul style={cssDisplay}>
+        {poems.map((poem) => {
+          return (
+            <li key={"linkto" + poem.poemId}>
+              <a href={"#" + poem.poemId}>
+                {generatePoemTitle(poem) + "     "}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
