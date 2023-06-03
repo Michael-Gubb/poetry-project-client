@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEventHandler } from "react";
 import { generatePoemTitle } from "../utils/poemUtils";
 import Poem from "./Poem";
 import "./Poems.css";
@@ -21,6 +21,7 @@ export default function Poems() {
     },
   ]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filterToPoems, setFilterToPoems] = useState(false);
   useEffect(() => {
     const poemController = new AbortController();
     const poemSignal = poemController.signal;
@@ -35,17 +36,35 @@ export default function Poems() {
       poemController.abort();
     };
   }, []);
+  function handleFilterPoems() {
+    setFilterToPoems((v) => !v);
+  }
 
   if (isLoading) {
     return <Loading />;
   }
 
-  return <PoemsList poems={poems} />;
+  return (
+    <PoemsList
+      poems={poems.filter(
+        (poem) => !filterToPoems || poem.poemGenre === "poem"
+      )}
+      handleFilterPoems={handleFilterPoems}
+    />
+  );
 }
 
-function PoemsList({ poems }: { poems: Poem[] }) {
+function PoemsList({
+  poems,
+  handleFilterPoems,
+}: {
+  poems: Poem[];
+  handleFilterPoems: MouseEventHandler;
+}) {
   return (
     <>
+      <button onClick={handleFilterPoems}>Filter to poems</button>
+
       <PoemsTitles poems={poems} />
       <ul>
         {poems.map((poem) => (
