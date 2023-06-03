@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { allPoemGenres, allPoemTopics } from "../utils/poemUtils";
 
-/** Creates list of poem titles with links to poems */
+/** Controls filtering of poems by genre and topic */
 export default function PoemsFilter() {
   const [closed, setClosed] = useState(true);
   function handleShow() {
@@ -21,7 +22,7 @@ export default function PoemsFilter() {
     </div>
   );
 }
-
+/** Controls filtering of poems by genre */
 function GenreFilter() {
   const [closed, setClosed] = useState(true);
   function handleShow() {
@@ -35,11 +36,28 @@ function GenreFilter() {
       <button onClick={handleShow}>
         {closed ? "Show Genre filter" : "Hide Genre filter"}
       </button>
-      <p style={cssDisplay}>Genre table</p>
+      <div style={cssDisplay}>
+        <h2>Genre filter</h2>
+        <form>
+          {allPoemGenres.map((genre) => (
+            <GenreFilterInput genre={genre} key={genre} />
+          ))}
+        </form>
+      </div>
     </div>
   );
 }
 
+function GenreFilterInput({ genre }: { genre: string }) {
+  return (
+    <>
+      <label htmlFor={genre}>{genre}</label>
+      <input id={genre} type="checkbox"></input>
+    </>
+  );
+}
+
+/** Controls filtering of poems by topic */
 function TopicsFilter() {
   const [closed, setClosed] = useState(true);
   function handleShow() {
@@ -53,7 +71,23 @@ function TopicsFilter() {
       <button onClick={handleShow}>
         {closed ? "Show Topics filter" : "Hide Topics filter"}
       </button>
-      <p style={cssDisplay}>Topics table</p>
+      <div style={cssDisplay}>
+        <h2>Topic filter</h2>
+        <form>
+          {allPoemTopics.map((topic) => (
+            <TopicFilterInput topic={topic} key={topic} />
+          ))}
+        </form>
+      </div>
     </div>
+  );
+}
+
+function TopicFilterInput({ topic }: { topic: string }) {
+  return (
+    <>
+      <label htmlFor={topic}>{topic}</label>
+      <input id={topic} type="checkbox"></input>
+    </>
   );
 }
