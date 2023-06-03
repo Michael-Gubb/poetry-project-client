@@ -7,7 +7,7 @@ import {
 test("filterPoemByGenreGenerator returns a function that passes a poem that does not match input", () => {
   const genresToRemove = { poem: true, eulogy: true };
 
-  const filter = filterPoemByGenreGenerator(genresToRemove);
+  const showPoem = filterPoemByGenreGenerator(genresToRemove);
 
   const inputPoem: Poem = {
     poemGenre: "fish",
@@ -17,13 +17,14 @@ test("filterPoemByGenreGenerator returns a function that passes a poem that does
     poemText: "hello",
     poemImg: "",
   };
-  expect(filter(inputPoem)).toBe(true);
+
+  expect(showPoem(inputPoem)).toBe(true);
 });
 
 test("filterPoemByGenreGenerator returns a function that fails a poem that matches input", () => {
   const genresToRemove = { poem: true, eulogy: true };
 
-  const filter = filterPoemByGenreGenerator(genresToRemove);
+  const showPoem = filterPoemByGenreGenerator(genresToRemove);
 
   const inputPoem: Poem = {
     poemGenre: "poem",
@@ -33,13 +34,14 @@ test("filterPoemByGenreGenerator returns a function that fails a poem that match
     poemText: "hello",
     poemImg: "",
   };
-  expect(filter(inputPoem)).toBe(false);
+
+  expect(showPoem(inputPoem)).toBe(false);
 });
 
 test("filterPoemByTopicGenerator returns a function that passes a poem that does not match input", () => {
   const topicsToRemove = { dog: true, fish: true };
 
-  const filter = filterPoemByTopicGenerator(topicsToRemove);
+  const showPoem = filterPoemByTopicGenerator(topicsToRemove);
 
   const inputPoem: Poem = {
     poemGenre: "poem",
@@ -49,13 +51,14 @@ test("filterPoemByTopicGenerator returns a function that passes a poem that does
     poemText: "hello",
     poemImg: "",
   };
-  expect(filter(inputPoem)).toBe(true);
+
+  expect(showPoem(inputPoem)).toBe(true);
 });
 
 test("filterPoemByGenreGenerator returns a function that fails a poem that matches input", () => {
   const topicsToRemove = { dog: true, fish: true };
 
-  const filter = filterPoemByTopicGenerator(topicsToRemove);
+  const showPoem = filterPoemByTopicGenerator(topicsToRemove);
 
   const inputPoem: Poem = {
     poemGenre: "poem",
@@ -65,5 +68,6 @@ test("filterPoemByGenreGenerator returns a function that fails a poem that match
     poemText: "hello",
     poemImg: "",
   };
-  expect(filter(inputPoem)).toBe(false);
+
+  expect(showPoem(inputPoem)).toBe(false);
 });
