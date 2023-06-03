@@ -5,15 +5,15 @@ import {
 } from "./poemUtils";
 
 test("filterPoemByGenreGenerator returns a function that passes a poem that does not match input", () => {
-  const genresToRemove = { poem: true, eulogy: true };
+  const genresToRemove = { poem: true, eulogy: true, limerick: false };
 
   const showPoem = filterPoemByGenreGenerator(genresToRemove);
 
   const inputPoem: Poem = {
-    poemGenre: "fish",
+    poemGenre: "limerick",
     poemId: "1",
     poemDate: "1",
-    poemTopics: ["hello"],
+    poemTopics: ["Fish", "Cats", "Hats"],
     poemText: "hello",
     poemImg: "",
   };
@@ -22,15 +22,16 @@ test("filterPoemByGenreGenerator returns a function that passes a poem that does
 });
 
 test("filterPoemByGenreGenerator returns a function that fails a poem that matches input", () => {
-  const genresToRemove = { poem: true, eulogy: true };
+  const genresToRemove = { poem: true, eulogy: true, limerick: false };
 
   const showPoem = filterPoemByGenreGenerator(genresToRemove);
 
+  /** Poem that has genre in topicsToRemove */
   const inputPoem: Poem = {
     poemGenre: "poem",
     poemId: "1",
     poemDate: "1",
-    poemTopics: ["dog"],
+    poemTopics: ["Fish", "Cats", "Hats"],
     poemText: "hello",
     poemImg: "",
   };
@@ -39,15 +40,16 @@ test("filterPoemByGenreGenerator returns a function that fails a poem that match
 });
 
 test("filterPoemByTopicGenerator returns a function that passes a poem that does not match input", () => {
-  const topicsToRemove = { dog: true, fish: true };
+  const topicsToRemove = { Dog: true, Fish: false, Cats: false, Hats: false };
 
   const showPoem = filterPoemByTopicGenerator(topicsToRemove);
 
+  /** Poem that does not have topic in topicsToRemove */
   const inputPoem: Poem = {
     poemGenre: "poem",
     poemId: "1",
     poemDate: "1",
-    poemTopics: ["hello", "goodbye"],
+    poemTopics: ["Fish", "Cats", "Hats"],
     poemText: "hello",
     poemImg: "",
   };
@@ -56,15 +58,16 @@ test("filterPoemByTopicGenerator returns a function that passes a poem that does
 });
 
 test("filterPoemByGenreGenerator returns a function that fails a poem that matches input", () => {
-  const topicsToRemove = { dog: true, fish: true };
+  const topicsToRemove = { Dog: true, Fish: true, Cats: false, Hats: false };
 
   const showPoem = filterPoemByTopicGenerator(topicsToRemove);
 
+  /** Poem that has topic in topicsToRemove */
   const inputPoem: Poem = {
     poemGenre: "poem",
     poemId: "1",
     poemDate: "1",
-    poemTopics: ["hello", "fish"],
+    poemTopics: ["Fish", "Cats", "Hats"],
     poemText: "hello",
     poemImg: "",
   };

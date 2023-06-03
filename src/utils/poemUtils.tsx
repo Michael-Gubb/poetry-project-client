@@ -11,7 +11,7 @@ type GenresToRemove = {
 export function filterPoemByGenreGenerator(genresToRemove: GenresToRemove) {
   const genresSet = new Set();
   for (const genre in genresToRemove) {
-    genresSet.add(genre);
+    if (genresToRemove[genre]) genresSet.add(genre);
   }
   /** Display a poem based on its genre */
   function showPoemByGenre(poem: Poem) {
@@ -31,7 +31,7 @@ type TopicsToRemove = {
 export function filterPoemByTopicGenerator(topicsToRemove: TopicsToRemove) {
   const topicsSet = new Set();
   for (const topic in topicsToRemove) {
-    topicsSet.add(topic);
+    if (topicsToRemove[topic]) topicsSet.add(topic);
   }
   /** Display a poem based on its topic */
   function showPoemByTopic(poem: Poem) {
