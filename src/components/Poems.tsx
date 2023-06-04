@@ -33,7 +33,7 @@ export default function Poems() {
     const poemSignal = poemController.signal;
     async function fetchPoems(signal: AbortSignal) {
       const response = await fetch(serverURL + poemsPath, { signal });
-      const data = await response.json();
+      const data: GetPoems = await response.json();
       setPoems(data.poems);
       setIsLoading(false);
     }

@@ -65,6 +65,20 @@ function GenreFilter({
       return !v;
     });
   }
+  function handleSelectAll() {
+    setHiddenGenres(
+      poemGenres.reduce((accumulator, value) => {
+        return { ...accumulator, [value]: false };
+      }, {})
+    );
+  }
+  function handleUnSelectAll() {
+    setHiddenGenres(
+      poemGenres.reduce((accumulator, value) => {
+        return { ...accumulator, [value]: true };
+      }, {})
+    );
+  }
   return (
     <div>
       <button onClick={handleShow}>
@@ -72,7 +86,21 @@ function GenreFilter({
       </button>
       <div className={closed ? "hidden" : ""}>
         <h2>Genre filter</h2>
-        <form>
+        <button
+          type="button"
+          form={"genre-filter-form"}
+          onClick={handleSelectAll}
+        >
+          Select all
+        </button>
+        <button
+          type="button"
+          form={"genre-filter-form"}
+          onClick={handleUnSelectAll}
+        >
+          Unselect all
+        </button>
+        <form id={"genre-filter-form"}>
           {poemGenres.map((genre) => (
             <GenreFilterInput
               genre={genre}
@@ -135,6 +163,20 @@ function TopicsFilter({
       return !v;
     });
   }
+  function handleSelectAll() {
+    setHiddenTopics(
+      poemTopics.reduce((accumulator, value) => {
+        return { ...accumulator, [value]: false };
+      }, {})
+    );
+  }
+  function handleUnSelectAll() {
+    setHiddenTopics(
+      poemTopics.reduce((accumulator, value) => {
+        return { ...accumulator, [value]: true };
+      }, {})
+    );
+  }
   return (
     <div>
       <button onClick={handleShow}>
@@ -142,10 +184,28 @@ function TopicsFilter({
       </button>
       <div className={closed ? "hidden" : ""}>
         <h2>Topic filter</h2>
-        <button onClick={() => setDisplayGenerously((v) => !v)}>
+        <button
+          type="button"
+          form={"topic-filter-form"}
+          onClick={() => setDisplayGenerously((v) => !v)}
+        >
           {displayGenerously ? "At least one" : "All required"}{" "}
         </button>
-        <form>
+        <button
+          type="button"
+          form={"topic-filter-form"}
+          onClick={handleSelectAll}
+        >
+          Select all
+        </button>
+        <button
+          type="button"
+          form={"topic-filter-form"}
+          onClick={handleUnSelectAll}
+        >
+          Unselect all
+        </button>
+        <form id={"topic-filter-form"}>
           {poemTopics.map((topic) => (
             <TopicFilterInput
               topic={topic}
