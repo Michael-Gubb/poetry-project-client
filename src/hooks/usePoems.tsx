@@ -20,7 +20,8 @@ export function usePoems(): [Poem[], boolean] {
       localStorage.setItem(localstoragePoemsKey, JSON.stringify(data.poems));
     }
     const savedPoems = localStorage.getItem(localstoragePoemsKey);
-    if (savedPoems !== null && savedPoems !== "null") {
+    if (savedPoems !== null) {
+      //should validate data here
       setPoems(JSON.parse(savedPoems));
       setIsLoading(false);
     } else {
