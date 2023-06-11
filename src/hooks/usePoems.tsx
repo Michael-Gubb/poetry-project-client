@@ -5,19 +5,27 @@ const serverURL = envServerURL ? envServerURL : "http://localhost:3333";
 const poemsPath = `/api/poems`;
 const localstoragePoemsKey = "poemsStorage";
 
-/** Returns poems and loading state, fetches poems if not already in local storage */
-export function usePoems(): [Poem[], boolean] {
+/** Returns poems, loading state and error state, fetches poems if not already in local storage
+ */
+export function usePoems(): [Poem[], boolean, boolean] {
   const [poems, setPoems] = useState<Poem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingError, setLoadingError] = useState(false);
   useEffect(() => {
     const poemController = new AbortController();
     const poemSignal = poemController.signal;
     async function fetchPoems(signal: AbortSignal) {
-      const response = await fetch(serverURL + poemsPath, { signal });
-      const data: GetPoems = await response.json();
-      setPoems(data.poems);
-      setIsLoading(false);
-      localStorage.setItem(localstoragePoemsKey, JSON.stringify(data.poems));
+      try {
+        const response = await fetch(serverURL + poemsPath, { signal });
+        const data: GetPoems = await response.json();
+        //should validate data here
+        setPoems(data.poems);
+        setIsLoading(false);
+        localStorage.setItem(localstoragePoemsKey, JSON.stringify(data.poems));
+      } catch (err) {
+        console.error(err);
+        setLoadingError(true);
+      }
     }
     const savedPoems = localStorage.getItem(localstoragePoemsKey);
     if (savedPoems !== null) {
@@ -32,6 +40,5 @@ export function usePoems(): [Poem[], boolean] {
       poemController.abort();
     };
   }, []);
-
-  return [poems, isLoading];
+  return [poems, isLoading, loadingError];
 }
