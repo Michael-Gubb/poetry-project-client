@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { generatePoemTitle } from "../utils/poemUtils";
 import { usePoems } from "../hooks/usePoems";
 import Poem from "./Poem";
 import PoemsFilter from "./PoemsFilter";
+import PoemsTitles from "./PoemsTitles";
 import { allPoemGenres, allPoemTopics } from "../utils/poemUtils";
 import {
   filterPoemByGenreGenerator,
@@ -62,55 +62,6 @@ function PoemsList({ poems }: { poems: Poem[] }) {
         ))}
       </ul>
     </>
-  );
-}
-
-/** Creates list of poem titles with links to poems */
-function PoemsTitles({
-  poems,
-  hiddenGenres,
-  hiddenTopics,
-  displayGenerously,
-}: {
-  poems: Poem[];
-  hiddenGenres: GenresToRemove;
-  hiddenTopics: TopicsToRemove;
-  displayGenerously: boolean;
-}) {
-  const [closed, setClosed] = useState(true);
-  function handleShow() {
-    setClosed((v) => {
-      return !v;
-    });
-  }
-  const topicGenerator = displayGenerously
-    ? filterPoemByTopicGenerouslyGenerator
-    : filterPoemByTopicGenerator;
-  return (
-    <div>
-      <button onClick={handleShow}>
-        {closed ? "Show Poems index" : "Hide Poems index"}
-      </button>
-      <ul className={closed ? "hidden" : ""}>
-        {poems.map((poem) => {
-          return (
-            <li
-              key={"linkto" + poem.poemId}
-              style={
-                filterPoemByGenreGenerator(hiddenGenres)(poem) &&
-                topicGenerator(hiddenTopics)(poem)
-                  ? { display: "list-item" }
-                  : { display: "none" }
-              }
-            >
-              <a href={"#" + poem.poemId}>
-                {generatePoemTitle(poem) + "     "}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
   );
 }
 
