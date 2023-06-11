@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
-import { generatePoemTitle } from "../utils/poemUtils";
+import { useState } from "react";
+import { usePoems } from "../hooks/usePoems";
 import Poem from "./Poem";
 import PoemsFilter from "./PoemsFilter";
+import PoemsTitles from "./PoemsTitles";
 import { allPoemGenres, allPoemTopics } from "../utils/poemUtils";
 import {
   filterPoemByGenreGenerator,
@@ -10,38 +11,12 @@ import {
 } from "../utils/poemUtils";
 import "./Poems.css";
 
-const envServerURL: string | undefined = import.meta.env.VITE_SERVER_URL;
-const serverURL = envServerURL ? envServerURL : "http://localhost:3333";
-const poemsPath = `/api/poems`;
 /**
  * Fetches data from server and displays index of poem titles with links and poem content
  */
 export default function Poems() {
-  const [poems, setPoems] = useState<Poem[]>([
-    {
-      poemText: "placeholder",
-      poemId: "5",
-      poemTopics: ["Dog", "Cat", "Fish"],
-      poemDate: "",
-      poemGenre: "",
-      poemImg: "",
-    },
-  ]);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const poemController = new AbortController();
-    const poemSignal = poemController.signal;
-    async function fetchPoems(signal: AbortSignal) {
-      const response = await fetch(serverURL + poemsPath, { signal });
-      const data: GetPoems = await response.json();
-      setPoems(data.poems);
-      setIsLoading(false);
-    }
-    fetchPoems(poemSignal);
-    return () => {
-      poemController.abort();
-    };
-  }, []);
+  const [poems, isLoading] = usePoems();
+
   if (isLoading) {
     return <Loading />;
   }
@@ -49,6 +24,7 @@ export default function Poems() {
   return <PoemsList poems={poems} />;
 }
 
+/** Displays poem filter, index of poems and poems */
 function PoemsList({ poems }: { poems: Poem[] }) {
   const [hiddenGenres, setHiddenGenres] = useState<GenresToRemove>({});
   const [hiddenTopics, setHiddenTopics] = useState<TopicsToRemove>({});
@@ -87,55 +63,6 @@ function PoemsList({ poems }: { poems: Poem[] }) {
         ))}
       </ul>
     </>
-  );
-}
-
-/** Creates list of poem titles with links to poems */
-function PoemsTitles({
-  poems,
-  hiddenGenres,
-  hiddenTopics,
-  displayGenerously,
-}: {
-  poems: Poem[];
-  hiddenGenres: GenresToRemove;
-  hiddenTopics: TopicsToRemove;
-  displayGenerously: boolean;
-}) {
-  const [closed, setClosed] = useState(true);
-  function handleShow() {
-    setClosed((v) => {
-      return !v;
-    });
-  }
-  const topicGenerator = displayGenerously
-    ? filterPoemByTopicGenerouslyGenerator
-    : filterPoemByTopicGenerator;
-  return (
-    <div>
-      <button onClick={handleShow}>
-        {closed ? "Show Poems index" : "Hide Poems index"}
-      </button>
-      <ul className={closed ? "hidden" : ""}>
-        {poems.map((poem) => {
-          return (
-            <li
-              key={"linkto" + poem.poemId}
-              style={
-                filterPoemByGenreGenerator(hiddenGenres)(poem) &&
-                topicGenerator(hiddenTopics)(poem)
-                  ? { display: "list-item" }
-                  : { display: "none" }
-              }
-            >
-              <a href={"#" + poem.poemId}>
-                {generatePoemTitle(poem) + "     "}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
   );
 }
 
