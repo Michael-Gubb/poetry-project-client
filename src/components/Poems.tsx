@@ -24,6 +24,7 @@ export default function Poems() {
   return <PoemsList poems={poems} />;
 }
 
+/** Displays poem filter, index of poems and poems */
 function PoemsList({ poems }: { poems: Poem[] }) {
   const [hiddenGenres, setHiddenGenres] = useState<GenresToRemove>({});
   const [hiddenTopics, setHiddenTopics] = useState<TopicsToRemove>({});

@@ -3,18 +3,11 @@ import { useState, useEffect } from "react";
 const envServerURL: string | undefined = import.meta.env.VITE_SERVER_URL;
 const serverURL = envServerURL ? envServerURL : "http://localhost:3333";
 const poemsPath = `/api/poems`;
+const localstoragePoemsKey = "poemsStorage";
 
+/** Returns poems and loading state, fetches poems if not already in local storage */
 export function usePoems(): [Poem[], boolean] {
-  const [poems, setPoems] = useState<Poem[]>([
-    {
-      poemText: "placeholder",
-      poemId: "5",
-      poemTopics: ["Dog", "Cat", "Fish"],
-      poemDate: "",
-      poemGenre: "",
-      poemImg: "",
-    },
-  ]);
+  const [poems, setPoems] = useState<Poem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const poemController = new AbortController();
@@ -24,8 +17,16 @@ export function usePoems(): [Poem[], boolean] {
       const data: GetPoems = await response.json();
       setPoems(data.poems);
       setIsLoading(false);
+      localStorage.setItem(localstoragePoemsKey, JSON.stringify(data.poems));
     }
-    fetchPoems(poemSignal);
+    const savedPoems = localStorage.getItem(localstoragePoemsKey);
+    if (savedPoems !== null && savedPoems !== "null") {
+      setPoems(JSON.parse(savedPoems));
+      setIsLoading(false);
+    } else {
+      fetchPoems(poemSignal);
+    }
+
     return () => {
       poemController.abort();
     };
