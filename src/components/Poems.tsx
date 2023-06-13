@@ -15,13 +15,24 @@ import "./Poems.css";
  * Fetches data from server and displays index of poem titles with links and poem content
  */
 export default function Poems() {
-  const [poems, isLoading] = usePoems();
+  const [poems, isLoading, loadingError, getMorePoems] = usePoems();
 
   if (isLoading) {
     return <Loading />;
   }
 
-  return <PoemsList poems={poems} />;
+  return (
+    <>
+      <button
+        onClick={() => {
+          getMorePoems();
+        }}
+      >
+        Get more poems
+      </button>
+      <PoemsList poems={poems} />
+    </>
+  );
 }
 
 /** Displays poem filter, index of poems and poems */

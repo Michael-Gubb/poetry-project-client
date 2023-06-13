@@ -7,7 +7,12 @@ const localstoragePoemsKey = "poemsStorage";
 
 /** Returns poems, loading state and error state, fetches poems if not already in local storage
  */
-export function usePoems(): [Poem[], boolean, boolean] {
+export function usePoems(): [
+  Poem[],
+  boolean,
+  boolean,
+  (arg0?: number) => void
+] {
   const [poems, setPoems] = useState<Poem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingError, setLoadingError] = useState(false);
@@ -40,5 +45,33 @@ export function usePoems(): [Poem[], boolean, boolean] {
       poemController.abort();
     };
   }, []);
-  return [poems, isLoading, loadingError];
+
+  const numberOfPoems = poems.length;
+
+  function getMorePeoms(morePoems = 50) {
+    const poemController = new AbortController();
+    const poemSignal = poemController.signal;
+    const poemsLimit = `?limit=${numberOfPoems + morePoems}`;
+    async function fetchPoems(signal: AbortSignal) {
+      try {
+        const response = await fetch(serverURL + poemsPath + poemsLimit, {
+          signal,
+        });
+        const data: GetPoems = await response.json();
+        //should validate data here
+        setPoems(data.poems);
+        setIsLoading(false);
+        localStorage.setItem(localstoragePoemsKey, JSON.stringify(data.poems));
+      } catch (err) {
+        console.error(err);
+        setLoadingError(true);
+      }
+    }
+
+    fetchPoems(poemSignal);
+
+    return;
+  }
+
+  return [poems, isLoading, loadingError, getMorePeoms];
 }
