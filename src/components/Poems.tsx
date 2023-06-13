@@ -16,11 +16,12 @@ import "./Poems.css";
  */
 export default function Poems() {
   const [poems, isLoading, loadingError, getMorePoems] = usePoems();
-
+  if (loadingError) {
+    console.log("error loading");
+  }
   if (isLoading) {
     return <Loading />;
   }
-
   return (
     <>
       <button

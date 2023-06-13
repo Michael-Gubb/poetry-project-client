@@ -17,7 +17,9 @@ type Poem = {
   //** Date created (Auckland TZ). As string as dates are annoying */
   poemDate: string;
 };
-
+/**
+ * Shape of the JSON object returned from the server from api/poems with GET
+ */
 type GetPoems = { poems: Poem[] };
 
 type GenresToRemove = {
@@ -26,3 +28,8 @@ type GenresToRemove = {
 type TopicsToRemove = {
   [index: string]: boolean;
 };
+
+/**
+ * Fetches an additional number of poems given by morePoems, with a default value of 50 extra
+ */
+type MorePoems = (morePoems?: number) => void;
